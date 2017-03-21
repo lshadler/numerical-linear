@@ -7,7 +7,7 @@ Simple function to plot the dimensions
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
-
+from sympy import Matrix, pprint
 def main():
 
 
@@ -30,10 +30,10 @@ def main():
 	# Plot the two ellipse with vectors
 	plotEllipse(u,s,title= "U-Space")
 	print("\n\nU matrix:")
-	print(u)
+	pprint(Matrix(u))
 	plotEllipse(v,  title= "V-Space")
 	print("\n\n V matrix:")
-	print(v)
+	pprint(Matrix(v))
 	plt.show()
 
 def plotEllipse(mat,s = np.array([1,1]),title= "Matrix plot"):
@@ -67,7 +67,7 @@ def plotEllipse(mat,s = np.array([1,1]),title= "Matrix plot"):
 			  scale=1             )
 	plt.plot(x,y)
 	plt.title(title)
-
+	plt.savefig(title + ".png")
 
 if __name__ == "__main__":
 	main()
