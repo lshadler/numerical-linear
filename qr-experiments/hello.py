@@ -33,51 +33,34 @@ def makeHelloMatrix():
 mat = makeHelloMatrix()
 u,sp,v = np.linalg.svd(mat)
 
-"""
+plt.figure()
+plt.plot(sp)
+plt.title("Singular Values")
+plt.savefig("singVals.png")
+s = np.zeros((15,40))
+for i in range(len(sp)):
+	s[i,i] = sp[i]
+
 print("Singular Values")
 pprint(Matrix(s))
 print("U")
 pprint(Matrix(u))
 print("V")
 pprint(Matrix(v))
-"""
-plt.figure()
-plt.plot(sp)
-s = np.zeros((15,40))
-for i in range(len(sp)):
-	s[i,i] = sp[i]
 
-
-plt.title("Singular Values")
-fig = plt.figure()
-ax = fig.add_subplot(1,1,1)
-ax.set_aspect('equal')
-plt.imshow(mat, interpolation='nearest')
 print(len(s))
 for i in range(len(sp)):
 	u_t = u[:,:(i+1)]
 	s_t = s[:(i+1),:(i+1)]
 	v_t = v[:(i+1),:]
-	"""
-	pprint(Matrix(u_t))
-	pprint(Matrix(s_t))
-	pprint(Matrix(v_t))
-	"""
+	
 	mat_t = np.dot(u_t,s_t)
 	mat_t = np.dot(mat_t,v_t)
-	#mat_t[np.nonzero(mat_t)] = 1
 	fig =plt.figure()
 	ax = fig.add_subplot(1,1,1)
 	ax.set_aspect('equal')
-	plt.title("rank {}".format(i+1))
+	plt.title("Rank {} Approximation".format(i+1))
 	plt.imshow(mat_t, interpolation='nearest', cmap='Greys')
-
-total = np.dot(u,s)
-total = np.dot(total,v)
-
-fig = plt.figure()
-ax = fig.add_subplot(1,1,1)
-ax.set_aspect('equal')
-plt.imshow(total, interpolation='nearest')
-pprint(Matrix(total))
+	filename = "rank{}approx.png".format(i+1)
+	plt.savefig(filename)
 plt.show()
