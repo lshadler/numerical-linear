@@ -1,0 +1,61 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import sys
+from sympy import pprint,Matrix
+
+"""
+mgs
+
+Computes the modified Gram-Schmidt and furthermore
+the Reduced QR Factorization of a given matrix
+
+Args:
+	matrix		An m x n matrix to be orthogonalized
+Returns:
+	Q			A matrix with unitary columns
+	R			An upper triangular matrix
+"""
+def house(matrix):
+	m,n = np.shape(matrix)
+	# Instantiate matrices
+	V = np.zeros((m,n))
+	A = np.copy(matrix)
+	R = np.zeros((n,n))
+
+	for k in range(n):
+		x = A[k:m,k:k+1]
+		updateVect = ((np.sign(x[0])*np.linalg.norm(x))*(np.eye(1,m-k,0))).T
+		V[k:m,k:k+1] = x + updateVect
+		V[k:m,k:k+1] = V[k:m,k:k+1]/np.linalg.norm(V[k:m,k:1]) 
+		A[k:m,k:n] = A[k:m,k:n] - 2*np.dot(V[k:m,k:k+1],np.dot(V[k:m,k:k+1].T,A[k:m,k:n]))
+	#A_inv = np.linalg.inv(A)
+	
+	Q = np.zeros((m,m))
+	return Q,A
+		
+
+"""
+Main program
+
+takes an argument of a stringsimilar to Matlab syntax
+
+'1 0; 0 1'  <-->  1 0
+				  0 1
+
+Prints the QR factorization
+"""
+
+matrix = np.matrix(str(sys.argv[1:]))
+print("---------- Original Matrix ----------")
+pprint(Matrix(matrix))
+q,r = house(matrix)
+print("\n\n---------- Householder Result ----------\n\n")
+print("\n\n---------- Q ----------")
+pprint(Matrix(q))
+print("\n\n---------- R ----------")
+pprint(Matrix(r))
+print("\n\n---------- Reconstructed Matrix ----------")
+pprint(Matrix(np.dot(q,r)))
+
+
+	
